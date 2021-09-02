@@ -361,6 +361,18 @@ namespace RFB.Portfolio
             // Icon URL
             string iconURL = imageDirectory + iconName;
 
+            // Add https
+            string absoluteURL = Application.absoluteURL;
+            if (!string.IsNullOrEmpty(absoluteURL) && absoluteURL.ToLower().StartsWith("https"))
+            {
+                iconURL = "https://" + iconURL;
+            }
+            // Add http
+            else
+            {
+                iconURL = "http://" + iconURL;
+            }
+
             // Icon load texture
             FileUtility.LoadTexture(iconURL, delegate (Texture2D t)
             {

@@ -1474,9 +1474,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectSheetID: projects
   gallerySheetID: gallery
-  imageDirectory: https://ryanfbailey.com/src/
+  imageDirectory: ryanfbailey.com/src/
   iconPostfix: _icon.jpg
   projects: []
+  projectParam: project
+  displayParam: display
 --- !u!114 &1775972117
 MonoBehaviour:
   m_ObjectHideFlags: 0
