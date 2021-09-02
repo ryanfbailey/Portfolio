@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 #if WEB_ENABLED
 using System.Runtime.InteropServices;
 #endif
@@ -46,6 +47,64 @@ namespace RFB.Utilities
 
             // Open URL
             Application.OpenURL(url);
+        }
+
+        // Get web parameters
+        public static Dictionary<string, string> GetWebParameters()
+        {
+            // Dictionary
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            // Start with URL
+            string url = Application.absoluteURL;
+            if (string.IsNullOrEmpty(url))
+            {
+                return parameters;
+            }
+
+            // Remove beginning
+            int begin = url.IndexOf("://");
+            if (begin != -1)
+            {
+                url = url.Substring(begin + 3);
+            }
+
+//#if WEB_ENABLED
+            // Remove before ?
+            begin = url.IndexOf("?");
+            if (begin != -1)
+            {
+                url = url.Substring(begin + 1);
+            }
+//#endif
+            // Split by &
+            string[] sections = url.Split('&');
+            if (sections != null)
+            {
+                foreach (string section in sections)
+                {
+                    // Get equal sign
+                    int mid = section.IndexOf("=");
+                    if (mid == -1)
+                    {
+                        continue;
+                    }
+                    // Get key
+                    string key = section.Substring(0, mid);
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        continue;
+                    }
+                    // Get & clean value
+                    string val = section.Substring(mid + 1);
+                    val = UnityWebRequest.UnEscapeURL(val);
+                    // Apply
+                    parameters[key] = val;
+                }
+            }
+
+            // Return
+            return parameters;
         }
     }
 }

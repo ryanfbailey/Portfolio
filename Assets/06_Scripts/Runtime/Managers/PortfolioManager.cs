@@ -33,6 +33,13 @@ namespace RFB.Portfolio
         // Whether or not loading
         public bool isLoading { get; private set; }
 
+        // Highlighted project
+        public string projectParam = "project";
+        public string highlightedProjectID { get; private set; }
+        // Display type
+        public string displayParam = "display";
+        public DisplayType displayLevel { get; private set; }
+
         // Currently selected project
         public int selectedProject { get; private set; }
         // Project selected
@@ -97,13 +104,36 @@ namespace RFB.Portfolio
                 return;
             }
 
+            // Highlighted project if applicable
+
+            // URL parameters
+            Dictionary<string, string> urlParams = WebGLUtility.GetWebParameters();
+
+            // Determine highlighted project if applicable
+            highlightedProjectID = "";
+            if (urlParams.ContainsKey(projectParam))
+            {
+                highlightedProjectID = urlParams[projectParam];
+            }
+
             // Determine display level
-            DisplayType displayLevel = DisplayType.Live;
+            displayLevel = DisplayType.Live;
 #if UNITY_EDITOR
             displayLevel = DisplayType.QA;
 #endif
-            //
-
+            if (urlParams.ContainsKey(displayParam))
+            {
+                DisplayType newDisplay;
+                string displayVal = urlParams[displayParam];
+                if (!Enum.TryParse<DisplayType>(displayVal, true, out newDisplay))
+                {
+                    Log("Project Display Level Invalid\nValue: " + displayVal, LogType.Warning);
+                }
+                else
+                {
+                    displayLevel = newDisplay;
+                }
+            }
 
             // Add projects
             List<string> imageURLs = new List<string>();
@@ -112,7 +142,7 @@ namespace RFB.Portfolio
             {
                 // Ignore if hidden
                 ProjectData datum = projectData[i];
-                if ((int)datum.display < (int)displayLevel)
+                if ((int)datum.display < (int)displayLevel && !string.Equals(highlightedProjectID, datum.projectID, StringComparison.CurrentCultureIgnoreCase))
                 {
                     continue;
                 }
@@ -124,9 +154,18 @@ namespace RFB.Portfolio
             // Sort
             projectList.Sort(delegate (ProjectData p1, ProjectData p2)
             {
-                // Inverse index
+                // Is highlighted
+                bool h1 = string.Equals(highlightedProjectID, p1.projectID, StringComparison.CurrentCultureIgnoreCase);
+                bool h2 = string.Equals(highlightedProjectID, p2.projectID, StringComparison.CurrentCultureIgnoreCase);
+                if (h1 != h2)
+                {
+                    return h1 ? -1 : 1;
+                }
+                // Index
                 int c = p1.index.CompareTo(p2.index);
-                return -c;
+                // Invert
+                c = -c;
+                return c;
             });
 
             // Set data
