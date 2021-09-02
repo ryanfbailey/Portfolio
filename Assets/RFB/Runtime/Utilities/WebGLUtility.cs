@@ -39,7 +39,7 @@ namespace RFB.Utilities
         {
 #if WEB_ENABLED
             // On mobile, this fails
-            if (AppManager.instance.debugPlatform == AppPlatform.Desktop)
+            if (AppManager.instance.platform == AppPlatform.Desktop)
             {
                 OpenURLInNewTab(url);
             }
