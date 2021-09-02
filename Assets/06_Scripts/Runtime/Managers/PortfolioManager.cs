@@ -99,6 +99,12 @@ namespace RFB.Portfolio
                 return;
             }
 
+            // Determine display level
+            DisplayType displayLevel = DisplayType.Live;
+#if UNITY_EDITOR
+            displayLevel = hideHidden ? DisplayType.QA : DisplayType.Hidden;
+#endif
+
             // Add projects
             List<string> imageURLs = new List<string>();
             List<ProjectData> projectList = new List<ProjectData>();
@@ -106,7 +112,7 @@ namespace RFB.Portfolio
             {
                 // Ignore if hidden
                 ProjectData datum = projectData[i];
-                if (hideHidden && datum.hidden)
+                if ((int)datum.display < (int)displayLevel)
                 {
                     continue;
                 }

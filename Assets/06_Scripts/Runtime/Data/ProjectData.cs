@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Type of display
+public enum DisplayType
+{
+    Hidden = 0,
+    QA = 1,
+    Live = 2
+}
+
 // Type of project
 public enum ProjectType
 {
@@ -18,10 +26,10 @@ public struct ProjectData
     public string projectID;
     // Row index
     public int index;
+    // Whether project should be hidden from portfolio
+    public DisplayType display;
     // Type of project
     public ProjectType type;
-    // Whether project should be hidden from portfolio
-    public bool hidden;
 
     // Title
     public string title;
