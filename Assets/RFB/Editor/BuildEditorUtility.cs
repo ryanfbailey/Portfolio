@@ -13,6 +13,16 @@ namespace RFB.EditorUtility
         [MenuItem("Tools/RFB/Build")]
         public static void Build()
         {
+            Build(false);
+        }
+        [MenuItem("Tools/RFB/Build And Run")]
+        public static void BuildRun()
+        {
+            Build(true);
+        }
+
+        public static void Build(bool buildAndRun)
+        {
             // Get platform directory
             string buildDirectory = Application.dataPath.Replace("\\", "/").Replace("/Assets", "/Builds") + "/";
             if (!Directory.Exists(buildDirectory))
@@ -55,7 +65,7 @@ namespace RFB.EditorUtility
             // Build & Run if Possible
             string buildPath = buildDirectory + buildName;
             Debug.Log("Build Path\nPath: " + buildPath);
-            BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildPath, buildTarget, BuildOptions.None);
+            BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildPath, buildTarget, buildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None);
         }
 
         // Callback
