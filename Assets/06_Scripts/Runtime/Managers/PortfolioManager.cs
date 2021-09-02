@@ -14,8 +14,6 @@ namespace RFB.Portfolio
         public string projectSheetID = "projects";
         // Gallery data
         public string gallerySheetID = "gallery";
-        // Hide hidden
-        public bool hideHidden = true;
 
         [Header("Image Settings")]
         // Image directory
@@ -102,8 +100,10 @@ namespace RFB.Portfolio
             // Determine display level
             DisplayType displayLevel = DisplayType.Live;
 #if UNITY_EDITOR
-            displayLevel = hideHidden ? DisplayType.QA : DisplayType.Hidden;
+            displayLevel = DisplayType.QA;
 #endif
+            //
+
 
             // Add projects
             List<string> imageURLs = new List<string>();
@@ -277,20 +277,25 @@ namespace RFB.Portfolio
         #endregion
 
         #region HELPERS
-        // Open URL
-        public void OpenURL(string textID)
+        // Open from text ID
+        public void OpenWebLocalizedURL(string textID)
         {
             // Ignore
             string url = LocalizationManager.instance.GetText(textID);
             if (string.IsNullOrEmpty(url))
             {
-                Log("Invalid URL ID: " + textID, LogType.Error);
+                Log("Invalid URL Text ID: " + textID, LogType.Error);
             }
-            // Open url
+            // Open
             else
             {
-                AppManager.instance.OpenURL(url);
+                OpenWebURL(url);
             }
+        }
+        // Open URL
+        public void OpenWebURL(string url)
+        {
+            WebGLUtility.OpenWebURL(url);
         }
         // Get project index from id
         public int GetProjectIndex(string projectID)

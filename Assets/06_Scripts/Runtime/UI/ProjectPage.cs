@@ -391,7 +391,7 @@ namespace RFB.Portfolio
             }
 
             // Open URL
-            AppManager.instance.OpenURL(url);
+            PortfolioManager.instance.OpenWebURL(url);
         }
         // Iterate
         private void GalleryIterate(bool toNext)

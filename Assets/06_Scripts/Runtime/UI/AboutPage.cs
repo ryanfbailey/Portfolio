@@ -52,22 +52,22 @@ namespace RFB.Portfolio
         // Linked In Click
         private void LinkedInClick()
         {
-            PortfolioManager.instance.OpenURL("LINKEDIN_URL");
+            PortfolioManager.instance.OpenWebLocalizedURL("LINKEDIN_URL");
         }
         // Github click
         private void GithubClick()
         {
-            PortfolioManager.instance.OpenURL("GITHUB_URL");
+            PortfolioManager.instance.OpenWebLocalizedURL("GITHUB_URL");
         }
         // Instagram click
         private void InstagramClick()
         {
-            PortfolioManager.instance.OpenURL("INSTAGRAM_URL");
+            PortfolioManager.instance.OpenWebLocalizedURL("INSTAGRAM_URL");
         }
         // Contact click
         private void ContactClick()
         {
-            PortfolioManager.instance.OpenURL("EMAIL_URL");
+            PortfolioManager.instance.OpenWebLocalizedURL("EMAIL_URL");
         }
         #endregion
 

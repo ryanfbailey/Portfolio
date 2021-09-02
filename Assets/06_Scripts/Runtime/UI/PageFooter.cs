@@ -43,7 +43,7 @@ namespace RFB.Portfolio
         // Middle Button click
         private void MiddleButtonClick()
         {
-            PortfolioManager.instance.OpenURL(middleLinkID);
+            PortfolioManager.instance.OpenWebLocalizedURL(middleLinkID);
         }
     }
 }

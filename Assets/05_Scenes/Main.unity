@@ -469,7 +469,7 @@ MonoBehaviour:
   - {fileID: 8049199481126007618, guid: a5067d9d47d234317a9e9e17803ec88a, type: 3}
   - {fileID: 2375609859221653108, guid: e72158609eb1640819a59c02f1e6a0f6, type: 3}
   pageHeaderHeight: 100
-  pageFooterHeight: 180
+  pageFooterHeight: 160
   pageMargin: 100
   pageMinPadding: 50
   scrollDuration: 0.5
@@ -1474,7 +1474,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectSheetID: projects
   gallerySheetID: gallery
-  hideHidden: 1
   imageDirectory: https://ryanfbailey.com/src/
   iconPostfix: _icon.jpg
   projects: []

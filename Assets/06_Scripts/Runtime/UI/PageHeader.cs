@@ -169,7 +169,7 @@ namespace RFB.Portfolio
         // Take to pdf
         private void ResumeClick()
         {
-            PortfolioManager.instance.OpenURL("RESUME_URL");
+            PortfolioManager.instance.OpenWebLocalizedURL("RESUME_URL");
         }
     }
 }

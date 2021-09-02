@@ -33,7 +33,7 @@ namespace RFB.Portfolio
         // Contact click
         private void ContactClick()
         {
-            PortfolioManager.instance.OpenURL("EMAIL_URL");
+            PortfolioManager.instance.OpenWebLocalizedURL("EMAIL_URL");
         }
         #endregion
 

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Runtime.InteropServices;
 
 namespace RFB.Utilities
 {
@@ -82,9 +81,12 @@ namespace RFB.Utilities
 #if UNITY_IOS || UNITY_ANDROID
             // Mobile platforms
             newPlatform = AppPlatform.Mobile
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#elif UNITY_WEBGL
             // Use plugin to check platform
-            newPlatform = IsMobileDevice() ? AppPlatform.Mobile : AppPlatform.Desktop;
+            if (WebGLUtility.IsWebMobile())
+            {
+                newPlatform = AppPlatform.Mobile;
+            }
 #endif
 
             // Check for tablet
@@ -126,31 +128,5 @@ namespace RFB.Utilities
                 }
             }
         }
-
-        // Open URL
-        public void OpenURL(string newURL)
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            // Open in New Tab
-            if (newURL.ToLower().StartsWith("http") && platform == AppPlatform.Desktop)
-            {
-                OpenURLInNewTab(newURL);
-                return;
-            }
-#endif
-
-            // Open URL
-            Application.OpenURL(newURL);
-        }
-
-        #region WEBGL
-#if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")]
-        private static extern bool IsMobileDevice();
-
-        [DllImport("__Internal")]
-        private static extern void OpenURLInNewTab(string url);
-#endif
-        #endregion
     }
 }
