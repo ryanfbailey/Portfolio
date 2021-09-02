@@ -17,6 +17,7 @@ namespace RFB.Portfolio
         // Buttons
         public RectTransform buttonContainer;
         public RFBPButton linkedInBtn;
+        public RFBPButton githubBtn;
         public RFBPButton instagramBtn;
         // Labels
         public TextMeshProUGUI titleLabel;
@@ -35,6 +36,7 @@ namespace RFB.Portfolio
         {
             base.Awake();
             linkedInBtn.onClick.AddListener(LinkedInClick);
+            githubBtn.onClick.AddListener(GithubClick);
             instagramBtn.onClick.AddListener(InstagramClick);
             contactBtn.onClick.AddListener(ContactClick);
         }
@@ -43,6 +45,7 @@ namespace RFB.Portfolio
         {
             base.OnDestroy();
             linkedInBtn.onClick.RemoveListener(LinkedInClick);
+            githubBtn.onClick.RemoveListener(GithubClick);
             instagramBtn.onClick.RemoveListener(InstagramClick);
             contactBtn.onClick.RemoveListener(ContactClick);
         }
@@ -50,6 +53,11 @@ namespace RFB.Portfolio
         private void LinkedInClick()
         {
             PortfolioManager.instance.OpenURL("LINKEDIN_URL");
+        }
+        // Github click
+        private void GithubClick()
+        {
+            PortfolioManager.instance.OpenURL("GITHUB_URL");
         }
         // Instagram click
         private void InstagramClick()
