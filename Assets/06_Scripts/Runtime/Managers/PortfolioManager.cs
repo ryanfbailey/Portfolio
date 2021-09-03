@@ -27,11 +27,14 @@ namespace RFB.Portfolio
 #else
         public ProjectData[] projects { get; private set; }
 #endif
-        // Projects loaded
-        public static event Action onProjectsLoaded;
 
         // Whether or not loading
         public bool isLoading { get; private set; }
+        // Load progress
+        public float loadProgress { get; private set; }
+        // Projects loaded
+        public static event Action onProjectsLoaded;
+
 
         // Highlighted project
         public string projectParam = "project";

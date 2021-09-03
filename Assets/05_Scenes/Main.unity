@@ -1306,13 +1306,13 @@ MonoBehaviour:
   - labelID: HDR_BTN_HOVER
     labelSwatchID: LIGHT_GRAY
     labelFontSize: 30
-    labelFontStyles: 0
+    labelFontStyles: 4
     labelFont: {fileID: 11400000, guid: 7e245bd23d7a84d29a8c4719a4b75241, type: 2}
     labelFontMaterial: {fileID: 8745845537854828798, guid: 7e245bd23d7a84d29a8c4719a4b75241, type: 2}
   - labelID: HDR_BTN_PRESS
-    labelSwatchID: LIGHT_GREEN
+    labelSwatchID: MID_GREEN
     labelFontSize: 30
-    labelFontStyles: 0
+    labelFontStyles: 4
     labelFont: {fileID: 11400000, guid: 7e245bd23d7a84d29a8c4719a4b75241, type: 2}
     labelFontMaterial: {fileID: 8745845537854828798, guid: 7e245bd23d7a84d29a8c4719a4b75241, type: 2}
   - labelID: HDR_BTN_SELECTED
