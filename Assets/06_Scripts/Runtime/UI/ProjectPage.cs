@@ -116,6 +116,12 @@ namespace RFB.Portfolio
             selectTable.LoadTable(this);
             selectTable.SelectCell(0, PortfolioManager.instance.selectedProject);
 
+            // Wait for gallery
+            while (!string.IsNullOrEmpty(_galleryName))
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
             // Perform load
             yield return StartCoroutine(base.PerformAssetLoad());
         }

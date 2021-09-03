@@ -436,56 +436,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8049199481126007618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5952144928970825355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c4e858b7ac7d4fbbbf670fb5a8bcb18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pageID: PROJECTS
-  pageBgSwatchID: DARK_GREEN
-  pageHeaderLabelID: HEADER
-  textPadding: 5
-  pageBg: {fileID: 2758151206737849366}
-  contentContainer: {fileID: 9205910612227332024}
-  selectDefaultIcon: {fileID: 2800000, guid: 47a015e088c754965b5a6970afa8f532, type: 3}
-  selectTableCell: {fileID: 5009441828985731229, guid: 24e40d8bd816343ed989f44ed8e6d081, type: 3}
-  selectTable: {fileID: 5320935979720116862}
-  infoBackgroundSwatchID: LIGHT_GRAY
-  infoBackground: {fileID: 7381582034018575224}
-  infoBackgroundGradientSwatchID: MID_GRAY
-  infoBackgroundGradient: {fileID: 5264216490061494440}
-  galleryBackgroundSwatchID: MID_GREEN
-  galleryBackground: {fileID: 1578503078134120828}
-  infoContainer: {fileID: 7771963254014346398}
-  titleTemplateID: PROJECT_TITLE
-  titleLabel: {fileID: 4033097682448933165}
-  subtitleTemplateID: PROJECT_SUBTITLE
-  subtitleLabel: {fileID: 3907130152874793779}
-  descriptionTemplateID: PROJECT_DESCRIPTION
-  descriptionLabel: {fileID: 5464800153307203683}
-  galleryMargin: 50
-  galleryWidth: 650
-  galleryImageContainer: {fileID: 3506655775523552082}
-  galleryTextContainer: {fileID: 2018257577132215481}
-  galleryDescriptionTemplateID: GALLERY_DESCRIPTION
-  galleryDescriptionLabel: {fileID: 4115969133732183649}
-  galleryTotalTemplateID: GALLERY_COUNT
-  galleryTotalLabel: {fileID: 6668931555282711042}
-  galleryImage: {fileID: 5298878310243876909}
-  galleryPrevButton: {fileID: 1063084141298230035}
-  galleryNextButton: {fileID: 2789308884443209969}
-  galleryLoaderSwatchID: MID_GREEN
-  galleryLoader: {fileID: 32990404623988842}
-  galleryLoadContainer: {fileID: 4177136776167937338}
-  galleryPlayButton: {fileID: 1457580753200980928}
-  placeholderImage: {fileID: 0}
 --- !u!1 &2168070267896599886
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,7 +881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 738, y: 0}
+  m_AnchoredPosition: {x: 0.051818848, y: 0}
   m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &7030173131485052335
@@ -1106,6 +1056,56 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8049199481126007618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5952144928970825355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c4e858b7ac7d4fbbbf670fb5a8bcb18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pageID: PROJECTS
+  pageBgSwatchID: DARK_GREEN_BG
+  pageHeaderLabelID: HEADER
+  textPadding: 5
+  pageBg: {fileID: 2758151206737849366}
+  contentContainer: {fileID: 9205910612227332024}
+  selectDefaultIcon: {fileID: 2800000, guid: 47a015e088c754965b5a6970afa8f532, type: 3}
+  selectTableCell: {fileID: 5009441828985731229, guid: 24e40d8bd816343ed989f44ed8e6d081, type: 3}
+  selectTable: {fileID: 5320935979720116862}
+  infoBackgroundSwatchID: LIGHT_GRAY
+  infoBackground: {fileID: 7381582034018575224}
+  infoBackgroundGradientSwatchID: MID_GRAY
+  infoBackgroundGradient: {fileID: 5264216490061494440}
+  galleryBackgroundSwatchID: MID_GREEN
+  galleryBackground: {fileID: 1578503078134120828}
+  infoContainer: {fileID: 7771963254014346398}
+  titleTemplateID: PROJECT_TITLE
+  titleLabel: {fileID: 4033097682448933165}
+  subtitleTemplateID: PROJECT_SUBTITLE
+  subtitleLabel: {fileID: 3907130152874793779}
+  descriptionTemplateID: PROJECT_DESCRIPTION
+  descriptionLabel: {fileID: 5464800153307203683}
+  galleryMargin: 50
+  galleryWidth: 650
+  galleryImageContainer: {fileID: 3506655775523552082}
+  galleryTextContainer: {fileID: 2018257577132215481}
+  galleryDescriptionTemplateID: GALLERY_DESCRIPTION
+  galleryDescriptionLabel: {fileID: 4115969133732183649}
+  galleryTotalTemplateID: GALLERY_COUNT
+  galleryTotalLabel: {fileID: 6668931555282711042}
+  galleryImage: {fileID: 5298878310243876909}
+  galleryPrevButton: {fileID: 1063084141298230035}
+  galleryNextButton: {fileID: 2789308884443209969}
+  galleryLoaderSwatchID: MID_GREEN
+  galleryLoader: {fileID: 32990404623988842}
+  galleryLoadContainer: {fileID: 4177136776167937338}
+  galleryPlayButton: {fileID: 1457580753200980928}
+  placeholderImage: {fileID: 0}
 --- !u!1 &7197568448131569733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1325,6 +1325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 24953842333996744}
   - component: {fileID: 5320935979720116862}
+  - component: {fileID: 3417215941666077308}
   m_Layer: 5
   m_Name: PROJECT_SELECT
   m_TagString: Untagged
@@ -1350,7 +1351,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 40, y: 170}
+  m_SizeDelta: {x: 0, y: 170}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &5320935979720116862
 MonoBehaviour:
@@ -1372,6 +1373,36 @@ MonoBehaviour:
   sectionMarginSize: 0
   cellMarginSize: 20
   contentAltAnchor: 0.5
+--- !u!114 &3417215941666077308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7292581206482872467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 150277369885939723}
+  m_Horizontal: 1
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 10
+  m_Viewport: {fileID: 0}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7622392285798830546
 GameObject:
   m_ObjectHideFlags: 0

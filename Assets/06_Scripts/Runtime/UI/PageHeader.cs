@@ -8,6 +8,12 @@ namespace RFB.Portfolio
 {
     public class PageHeader : MonoBehaviour
     {
+        [Header("Icon Settings")]
+        // Icon Swatch
+        public string iconSwatchID;
+        // Icon Image
+        public Image iconImage;
+
         [Header("Background Settings")]
         // Background Swatch
         public string bgSwatchID;
@@ -60,11 +66,9 @@ namespace RFB.Portfolio
         // Page manager loaded
         private void PageManagerLoaded(PageManager pageManager)
         {
-            // Set background
-            if (bgImage != null && !string.IsNullOrEmpty(bgSwatchID))
-            {
-                bgImage.color = LayoutManager.instance.GetSwatchColor(bgSwatchID);
-            }
+            // Set swatches
+            iconImage.color = LayoutManager.instance.GetSwatchColor(iconSwatchID);
+            bgImage.color = LayoutManager.instance.GetSwatchColor(bgSwatchID);
 
             // Add resume button
             float x = 0f;

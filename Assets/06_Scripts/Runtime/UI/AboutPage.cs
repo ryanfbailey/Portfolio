@@ -11,7 +11,10 @@ namespace RFB.Portfolio
     {
         [Header("UI Settings")]
         // Name
+        public string nameSwatchID;
         public RawImage nameImage;
+        public Vector2 nameShadowOffset;
+        public RectTransform nameImageShadow;
         // Profile
         public RawImage profileImage;
         // Buttons
@@ -26,6 +29,7 @@ namespace RFB.Portfolio
         public RFBPButton contactBtn;
 
         [Header("Layout Settings")]
+        public float namePadding = 10f;
         public float imagePadding = 20f;
         public float contactPrePadding = 20f;
         public float contactPostPadding = 20f;
@@ -77,7 +81,10 @@ namespace RFB.Portfolio
         {
             base.Load();
 
-            // Layout texts
+            // Set name label & apply
+            nameImage.color = LayoutManager.instance.GetSwatchColor(nameSwatchID);
+
+            // Layout additional texts
             titleLabel.text = LocalizationManager.instance.GetText("ABOUT_PAGE_TITLE");
             LayoutManager.instance.ApplyLabelSettings(titleLabel, "TITLE");
             subtitleLabel.text = LocalizationManager.instance.GetText("ABOUT_PAGE_SUBTITLE");
@@ -87,6 +94,14 @@ namespace RFB.Portfolio
             contactBtn.SetMainText(LocalizationManager.instance.GetText("ABOUT_PAGE_BTN"));
             contactBtn.SetPreferredWidth();
         }
+        // Get fancy string
+        private string GetFancyString(string content, string fontID, float fontSize)
+        {
+            string result = content;
+            result = "<font=" + fontID + ">" + result + "</font>";
+            result = "<size=" + fontSize + ">" + result + "</size>";
+            return result;
+        }
 
         // Resize
         public override float Resize()
@@ -94,7 +109,13 @@ namespace RFB.Portfolio
             // Portrait
             bool isPortrait = LayoutManager.instance.orientation == LayoutOrientation.Portrait;
             float containerWidth = contentContainer.rect.width;
-            float profileWidth = Mathf.Min(containerWidth * (isPortrait ? 1f : 0.4f), profileImage.texture.width);
+
+            // Make portrait if profile doesnt fit
+            if (profileImage.texture.width + imagePadding > containerWidth * 0.65f)
+            {
+                isPortrait = true;
+            }
+            float profileWidth = profileImage.texture.width;
 
             // Begin
             float y = base.Resize();
@@ -105,7 +126,9 @@ namespace RFB.Portfolio
             float nameHeight = nameWidth * (float)nameImage.texture.height / (float)nameImage.texture.width;
             nameImage.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, nameWidth);
             nameImage.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, nameHeight);
-            y += nameHeight + textPadding;
+            nameImageShadow.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, nameShadowOffset.x, nameWidth);
+            nameImageShadow.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y + nameShadowOffset.y, nameHeight);
+            y += nameHeight + namePadding;
 
             // Set profile image position/size
             float profileX = isPortrait ? ((containerWidth - profileWidth) * .5f) : 0f;
@@ -114,20 +137,19 @@ namespace RFB.Portfolio
             buttonContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, profileX, profileWidth);
             if (isPortrait)
             {
-                y -= textPadding;
+                y -= namePadding;
                 y += imagePadding;
                 profileImage.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, profileHeight);
-                y += profileHeight;
-                y += imagePadding;
+                y += profileHeight + imagePadding;
                 buttonContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, buttonContainer.rect.height);
-                y += buttonContainer.rect.height;
-                y += imagePadding;
+                y += buttonContainer.rect.height + imagePadding;
             }
             else
             {
                 profileImage.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, profileHeight);
-                buttonContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, profileHeight + imagePadding, buttonContainer.rect.height);
-                rightY = profileHeight + buttonContainer.rect.height + imagePadding * 3f;
+                rightY += profileHeight + imagePadding;
+                buttonContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightY, buttonContainer.rect.height);
+                rightY += buttonContainer.rect.height + contactPostPadding;
             }
 
             // Set title

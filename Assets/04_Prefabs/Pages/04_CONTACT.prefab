@@ -149,17 +149,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageID: CONTACT
-  pageBgSwatchID: DARK_GREEN
+  pageBgSwatchID: DARK_GREEN_BG
   pageHeaderLabelID: HEADER
   textPadding: 5
   pageBg: {fileID: 9078520041904663532}
   contentContainer: {fileID: 2628550656694046786}
   titleLabel: {fileID: 1418277903704687613}
   subtitleLabel: {fileID: 4993542405099864072}
+  contactPadding: 50
   contactBtn: {fileID: 4669593927211334379}
-  textPadding: 5
-  contactPrePadding: 100
-  contactPostPadding: 100
 --- !u!1 &5350581996456225215
 GameObject:
   m_ObjectHideFlags: 0
