@@ -1611,7 +1611,10 @@ MonoBehaviour:
     priority: 5
     progress: 0
   - id: PORTFOLIO
-    priority: 95
+    priority: 85
+    progress: 0
+  - id: GALLERY
+    priority: 10
     progress: 0
 --- !u!114 &1775972116
 MonoBehaviour:
@@ -1627,7 +1630,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectSheetID: projects
   gallerySheetID: gallery
-  loadProgressID: PORTFOLIO
+  iconProgressID: PORTFOLIO
+  galleryProgressID: GALLERY
   imageDirectory: ryanfbailey.com/src/
   iconPostfix: _icon.jpg
   projects: []
