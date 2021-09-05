@@ -613,7 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cdb08fcf73a2485c8a07a82e4c62253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLoadTime: 2
+  minLoadTime: 1.5
   hideTime: 0.5
   hideEase: 0
   loadProgrBar: {fileID: 2134022528}
