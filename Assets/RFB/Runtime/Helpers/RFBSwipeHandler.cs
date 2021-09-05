@@ -58,7 +58,7 @@ namespace RFB.Utilities
         protected virtual void Update()
         {
             // Check for a swipe
-            bool isMousePressed = Input.GetMouseButton(0) || Input.touchCount == 1;
+            bool isMousePressed = Input.GetMouseButton(0) || Input.touchCount > 0;
             bool isBtnPressed = isMousePressed && interactiveState == RFBInteractiveState.Pressed;
             if (!isBtnPressed)
             {
@@ -106,9 +106,11 @@ namespace RFB.Utilities
             Vector2 mousePosition = Input.mousePosition;
 
             // Get velocity
-            Vector2 velocity = (mousePosition - _touchStartPosition) * Time.deltaTime;
-            // Multiply by density per inch
-            velocity *= Screen.dpi;
+            Vector2 velocity = (mousePosition - _touchStartPosition);
+            // Divide by density
+            velocity /= Screen.dpi;
+            // Per second
+            velocity /= Time.deltaTime;
 
             // Lerp
             if (velocityLerp < 1f)
@@ -125,6 +127,10 @@ namespace RFB.Utilities
         {
             // Determine result
             RFBSwipeGesture result = RFBSwipeGesture.None;
+
+            // Last swipe
+            string v = velocity.x.ToString("0.000") + "x" + velocity.y.ToString("0.000");
+            LogUtility.LogStatic("Last Swipe", v);
 
             // Swipe velocity
             float magnitudeX = registerHorizontal ? Mathf.Abs(velocity.x) : 0f;
@@ -155,7 +161,6 @@ namespace RFB.Utilities
                     pos = !pos;
                 }
                 // Set
-                //Debug.Log("VAL: " + velocity.x);
                 result = pos ? RFBSwipeGesture.Right : RFBSwipeGesture.Left;
             }
             // Vertical swipe

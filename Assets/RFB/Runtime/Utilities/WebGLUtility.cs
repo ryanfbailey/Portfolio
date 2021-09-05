@@ -42,6 +42,7 @@ namespace RFB.Utilities
             if (AppManager.instance.platform == AppPlatform.Desktop)
             {
                 OpenURLInNewTab(url);
+                return;
             }
 #endif
 

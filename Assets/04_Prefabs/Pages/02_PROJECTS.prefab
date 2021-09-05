@@ -125,8 +125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggleGroups: []
-  velocityLerp: 0.2
-  minSwipeVelocity: 200
+  velocityLerp: 0.5
+  minSwipeVelocity: 125
   maxSwipeTime: 1
   registerHorizontal: 1
   registerVertical: 0
@@ -969,7 +969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5077e23d4a6194b748fc927bae81b2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLoadTime: 1
+  minLoadTime: 0.5
   progressSlider: {fileID: 0}
   progressImage: {fileID: 32990404623988842}
 --- !u!1 &4317073477830103453
