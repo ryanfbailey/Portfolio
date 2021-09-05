@@ -45,6 +45,8 @@ namespace RFB.Utilities
         #region LIFECYCLE
         // Download
         public bool downloadAtRuntime = true;
+        // Progress ID
+        public string downloadProgressID = "GOOGLE";
         // Google Sheets
         public GoogleSheetData[] sheets;
 
@@ -115,7 +117,12 @@ namespace RFB.Utilities
                         {
                             sheetContents = r;
                             loading = false;
-                        }, true);
+                        }, true, delegate(float progress)
+                        {
+                            float p = (float)i / (float)sheets.Length;
+                            p += (1f / (float)sheets.Length) * progress;
+                            AppManager.instance.SetLoadProgress(downloadProgressID, p);
+                        });
                         while (loading)
                         {
                             yield return null;

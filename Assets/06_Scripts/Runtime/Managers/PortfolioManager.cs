@@ -14,6 +14,8 @@ namespace RFB.Portfolio
         public string projectSheetID = "projects";
         // Gallery data
         public string gallerySheetID = "gallery";
+        // Icon download ID
+        public string loadProgressID = "PORTFOLIO";
 
         [Header("Image Settings")]
         // Image directory
@@ -248,6 +250,11 @@ namespace RFB.Portfolio
 
                 // Next
                 LoadIcon(projectIndex + 1);
+            }, delegate(float progress)
+            {
+                float p = (float)projectIndex / (float)projects.Length;
+                p += progress * (1f / (float)projects.Length);
+                AppManager.instance.SetLoadProgress(loadProgressID, p);
             });
         }
         // Load complete

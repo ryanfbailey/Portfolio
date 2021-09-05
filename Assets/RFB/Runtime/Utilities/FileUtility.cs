@@ -127,7 +127,7 @@ namespace RFB.Utilities
 
         #region TEXT
         // Load text
-        public static void LoadText(string url, Action<string> onTextLoaded, bool wantsAsync = false)
+        public static void LoadText(string url, Action<string> onTextLoaded, bool wantsAsync = false, Action<float> onTextProgress = null)
         {
             // Determine if should load async
             bool shouldAsync = ShouldAsync(url, wantsAsync);
@@ -158,7 +158,7 @@ namespace RFB.Utilities
                     {
                         onTextLoaded(result);
                     }
-                });
+                }, onTextProgress);
             }
             // Load sync
             else
@@ -177,6 +177,10 @@ namespace RFB.Utilities
                 }
 
                 // Return result
+                if (onTextProgress != null)
+                {
+                    onTextProgress(1f);
+                }
                 if (onTextLoaded != null)
                 {
                     onTextLoaded(result);

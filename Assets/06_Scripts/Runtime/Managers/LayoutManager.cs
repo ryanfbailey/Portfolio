@@ -69,6 +69,7 @@ namespace RFB.Portfolio
         {
             if (platform != AppPlatform.Unknown)
             {
+                RefreshScreenSize();
                 RefreshCanvasScale();
             }
         }
