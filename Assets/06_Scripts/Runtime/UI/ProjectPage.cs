@@ -433,7 +433,7 @@ namespace RFB.Portfolio
 
             // Iterate
             int galleryIndex = PortfolioManager.instance.selectedGalleryItem + (toNext ? 1 : -1);
-            galleryIndex = Mathf.Clamp(galleryIndex, 0, project.gallery.Length);
+            galleryIndex = Mathf.Clamp(galleryIndex, 0, project.gallery.Length - 1);
 
             // Apply
             PortfolioManager.instance.SelectGalleryItem(galleryIndex);
