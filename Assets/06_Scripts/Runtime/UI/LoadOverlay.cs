@@ -8,17 +8,12 @@ namespace RFB.Portfolio
 {
     public class LoadOverlay : MonoBehaviour
     {
-        // Min time
-        public float minLoadTime = 2f;
-
         // Hide
         public float hideTime = 0.5f;
         public TweenEase hideEase = TweenEase.easeOutQuad;
 
         // Progress bar
-        public Slider loadProgrBar;
-        // Progress
-        public float loadProgress { get; private set; }
+        public RFBProgressBar loadBar;
         // Load
         public bool isLoaded { get; private set; }
 
@@ -35,59 +30,28 @@ namespace RFB.Portfolio
                 fader.alpha = 1f;
                 fader.blocksRaycasts = true;
             }
-            loadProgress = 0.0001f;
-            loadProgrBar.value = loadProgress;
+            loadBar.SetProgress(0f);
             SetLoaded(false);
-            AppManager.onLoadComplete += LoadComplete;
-        }
-        // Apply progress
-        private void Update()
-        {
-            // Dont load
-            if (isLoaded)
-            {
-                return;
-            }
-
-            // New progress
-            float newProgress = loadProgress;
-            // Progress
-            newProgress += Time.deltaTime / minLoadTime;
-            // Dont progress too quick
-            newProgress = Mathf.Min(newProgress, AppManager.instance.loadProgress);
-            
-            // Set progress
-            SetLoadProgress(newProgress);
+            AppManager.onLoadProgressChange += SetLoadProgress;
         }
         // Destroy
         private void OnDestroy()
         {
-            AppManager.onLoadComplete -= LoadComplete;
+            AppManager.onLoadProgressChange -= SetLoadProgress;
         }
 
         // Set load progress
         private void SetLoadProgress(float newProgress)
         {
-            // Skip
-            if (loadProgress == newProgress)
-            {
-                return;
-            }
-
-            // Set progress
-            loadProgress = Mathf.Clamp01(newProgress);
-            loadProgrBar.value = loadProgress;
-
-            // Apply
-            if (loadProgress >= 1f)
+            loadBar.SetProgress(newProgress);
+        }
+        // Set loaded
+        private void Update()
+        {
+            if (!isLoaded && loadBar.value >= 1f)
             {
                 SetLoaded(true);
             }
-        }
-        // Loaded
-        private void LoadComplete()
-        {
-            //SetLoaded(true);
         }
         // Adjust based on loaded
         private void SetLoaded(bool toLoaded)

@@ -58,7 +58,7 @@ namespace RFB.Utilities
         protected virtual void Update()
         {
             // Check for a swipe
-            bool isMousePressed = Input.GetMouseButton(0);
+            bool isMousePressed = Input.GetMouseButton(0) || Input.touchCount == 1;
             bool isBtnPressed = isMousePressed && interactiveState == RFBInteractiveState.Pressed;
             if (!isBtnPressed)
             {

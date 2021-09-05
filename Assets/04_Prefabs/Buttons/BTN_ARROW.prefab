@@ -293,7 +293,7 @@ MonoBehaviour:
   defaultLabelID: BTN_DEFAULT
   hoverLabelID: BTN_HOVER
   pressLabelID: BTN_PRESS
-  disabledLabelID: 
+  disabledLabelID: BTN_DISABLE
   selectedLabelID: BTN_SELECTED
 --- !u!225 &616019603910643618
 CanvasGroup:

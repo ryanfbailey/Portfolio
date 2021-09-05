@@ -613,10 +613,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cdb08fcf73a2485c8a07a82e4c62253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLoadTime: 1.5
   hideTime: 0.5
   hideEase: 0
-  loadProgrBar: {fileID: 2134022528}
+  loadBar: {fileID: 2134022529}
 --- !u!1 &893775613
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,6 +2230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2134022527}
+  - component: {fileID: 2134022529}
   - component: {fileID: 2134022528}
   m_Layer: 5
   m_Name: PROGRESS_BAR
@@ -2310,3 +2310,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2134022529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134022526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5077e23d4a6194b748fc927bae81b2c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minLoadTime: 2
+  progressSlider: {fileID: 2134022528}
+  progressImage: {fileID: 0}

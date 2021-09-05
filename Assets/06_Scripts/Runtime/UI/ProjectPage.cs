@@ -54,8 +54,7 @@ namespace RFB.Portfolio
 
         // Loader
         public string galleryLoaderSwatchID;
-        public Image galleryLoader;
-        public GameObject galleryLoadContainer;
+        public RFBProgressBar galleryLoadProgress;
 
         // Video
         [Header("Project Video Settings")]
@@ -96,7 +95,7 @@ namespace RFB.Portfolio
             infoBackground.color = LayoutManager.instance.GetSwatchColor(infoBackgroundSwatchID);
             infoBackgroundGradient.color = LayoutManager.instance.GetSwatchColor(infoBackgroundGradientSwatchID);
             galleryBackground.color = LayoutManager.instance.GetSwatchColor(galleryBackgroundSwatchID);
-            galleryLoader.color = LayoutManager.instance.GetSwatchColor(galleryLoaderSwatchID);
+            galleryLoadProgress.progressImage.color = LayoutManager.instance.GetSwatchColor(galleryLoaderSwatchID);
 
             // Set label templates
             LayoutManager.instance.ApplyLabelSettings(titleLabel, titleTemplateID);
@@ -246,8 +245,8 @@ namespace RFB.Portfolio
             }
 
             // Fill amount
-            galleryLoader.fillAmount = 0f;
-            galleryLoadContainer.SetActive(false);
+            galleryLoadProgress.SetProgress(0f);
+            galleryLoadProgress.gameObject.SetActive(false);
 
             // Destroy previous
             if (_galleryThumb != null)
@@ -284,7 +283,7 @@ namespace RFB.Portfolio
 
             // Load image
             _galleryName = galleryItem.thumbName;
-            galleryLoadContainer.SetActive(true);
+            galleryLoadProgress.gameObject.SetActive(true);
             PortfolioManager.instance.LoadImage(_galleryName, delegate (Texture2D t)
             {
                 // Too Late
@@ -300,7 +299,6 @@ namespace RFB.Portfolio
                 else
                 {
                     _galleryName = "";
-                    galleryLoadContainer.SetActive(false);
                     if (t == null)
                     {
                         Log("Gallery Image Load - Null Texture\nName: " + galleryItem.thumbName, LogType.Warning);
@@ -317,9 +315,17 @@ namespace RFB.Portfolio
             {
                 if (string.Equals(galleryItem.thumbName, _galleryName, System.StringComparison.CurrentCultureIgnoreCase))
                 {
-                    galleryLoader.fillAmount = progress;
+                    galleryLoadProgress.SetProgress(progress);
                 }
             });
+        }
+        // Hide
+        private void Update()
+        {
+            if (galleryLoadProgress.gameObject.activeSelf && galleryLoadProgress.value == 1f)
+            {
+                galleryLoadProgress.gameObject.SetActive(false);
+            }
         }
         // Apply
         private void SetGalleryTexture(Texture2D newTexture)
