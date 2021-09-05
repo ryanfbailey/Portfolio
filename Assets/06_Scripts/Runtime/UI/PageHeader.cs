@@ -52,7 +52,6 @@ namespace RFB.Portfolio
             // Add delegate
             PageManager.onPageManagerLoad += PageManagerLoaded;
             PageManager.onPageSelected += PageSelected;
-            RFBButton.onSelectChange += OnSelectChange;
         }
         // On destroy
         private void OnDestroy()
@@ -60,7 +59,6 @@ namespace RFB.Portfolio
             // Remove delegate
             PageManager.onPageManagerLoad -= PageManagerLoaded;
             PageManager.onPageSelected -= PageSelected;
-            RFBButton.onSelectChange -= OnSelectChange;
         }
 
         // Page manager loaded
@@ -74,7 +72,7 @@ namespace RFB.Portfolio
             float x = 0f;
             resumeButton = GetButton(resumeButtonPrefab, "RESUME", ref x);
             resumeButton.selectButton = false;
-            resumeButton.onClick.AddListener(ResumeClick);
+            resumeButton.onClick += ResumeClick;
 
             // Add button per page
             headerButtons = new List<RFBPButton>();
@@ -86,6 +84,10 @@ namespace RFB.Portfolio
                 // Get button
                 RFBPButton btn = GetButton(headerButtonPrefab, page.pageID, ref x);
                 btn.selectButton = true;
+                btn.onSelectChange += delegate (bool toSelected)
+                {
+                    OnSelectChange(btn, toSelected);
+                };
 
                 // Set button
                 headerButtons.Add(btn);
@@ -118,7 +120,7 @@ namespace RFB.Portfolio
             btn.SetMainText(pageTitle);
 
             // Set size
-            float btnWidth = btn.GetPreferredWidth();
+            float btnWidth = btnTransform.rect.width;
             btnTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, x, btnWidth);
             x += btnWidth + buttonMargin;
 
@@ -127,13 +129,11 @@ namespace RFB.Portfolio
         }
 
         // Button selection
-        private void OnSelectChange(RFBButton btn, bool toSelected)
+        private void OnSelectChange(RFBPButton btn, bool toSelected)
         {
-            int index = headerButtons.IndexOf(btn.GetComponent<RFBPButton>());
+            int index = headerButtons.IndexOf(btn);
             if (toSelected && index != -1)
             {
-
-                // Set selected
                 SetSelected(index);
             }
         }

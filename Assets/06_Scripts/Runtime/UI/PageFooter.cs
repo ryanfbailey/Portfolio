@@ -22,14 +22,14 @@ namespace RFB.Portfolio
         // Awake
         protected virtual void Awake()
         {
-            middleButton.onClick.AddListener(MiddleButtonClick);
+            middleButton.onClick += (MiddleButtonClick);
             LocalizationManager.onLoadComplete += OnLocalizationLoad;
             bg.color = LayoutManager.instance.GetSwatchColor(bgSwatchID);
         }
         // Destroy
         protected virtual void OnDestroy()
         {
-            middleButton.onClick.RemoveListener(MiddleButtonClick);
+            middleButton.onClick -= (MiddleButtonClick);
             LocalizationManager.onLoadComplete -= OnLocalizationLoad;
         }
 
@@ -38,7 +38,6 @@ namespace RFB.Portfolio
         {
             string text = LocalizationManager.instance.GetText(middleTextID) + " - v" + Application.version;
             middleButton.SetMainText(text);
-            middleButton.SetPreferredWidth();
         }
         // Middle Button click
         private void MiddleButtonClick()

@@ -56,6 +56,10 @@ PrefabInstance:
       value: HDR_BTN_HOVER
       objectReference: {fileID: 0}
     - target: {fileID: 8186031412008479889, guid: 85b5fd0f7677e404ea8dcf97bed8e923, type: 3}
+      propertyPath: labelPadding
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186031412008479889, guid: 85b5fd0f7677e404ea8dcf97bed8e923, type: 3}
       propertyPath: pressLabelID
       value: HDR_BTN_PRESS
       objectReference: {fileID: 0}

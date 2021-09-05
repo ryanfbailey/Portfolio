@@ -22,13 +22,13 @@ namespace RFB.Portfolio
         protected override void Awake()
         {
             base.Awake();
-            contactBtn.onClick.AddListener(ContactClick);
+            contactBtn.onClick += (ContactClick);
         }
         // Remove delegates
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            contactBtn.onClick.RemoveListener(ContactClick);
+            contactBtn.onClick -= (ContactClick);
         }
         // Contact click
         private void ContactClick()
@@ -51,7 +51,6 @@ namespace RFB.Portfolio
 
             // Set up button
             contactBtn.SetMainText(LocalizationManager.instance.GetText("CONTACT_PAGE_BTN"));
-            contactBtn.SetPreferredWidth();
         }
 
         // Resize

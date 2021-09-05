@@ -9,16 +9,19 @@ namespace RFB.Portfolio
 {
     public class RFBPButton : RFBButton
     {
+        [Header("Layout Overrides")]
+        // Graphic
+        public Graphic outlineGraphic;
         // Default
         public string defaultLabelID;
         // Hover
         public string hoverLabelID;
         // Press
         public string pressLabelID;
+        // Disabled
+        public string disabledLabelID;
         // Selected
         public string selectedLabelID;
-        // Graphic
-        public Graphic outlineGraphic;
 
         // Current id
         public string currentID { get; private set; }
@@ -30,23 +33,31 @@ namespace RFB.Portfolio
             SetLabelSettings(defaultLabelID);
         }
 
-        // Refresh state
+        // Refresh
         protected override void RefreshState()
         {
             base.RefreshState();
+
+            // Get label id
             string newID = defaultLabelID;
-            if (isSelected)
+            if (interactiveState == RFBInteractiveState.Disabled)
+            {
+                newID = disabledLabelID;
+            }
+            else if (isSelected)
             {
                 newID = selectedLabelID;
             }
-            else if (!isDisabled && isPressed)
+            else if (interactiveState == RFBInteractiveState.Pressed)
             {
                 newID = pressLabelID;
             }
-            else if (!isDisabled && isHovered)
+            else if (interactiveState == RFBInteractiveState.Hovered)
             {
                 newID = hoverLabelID;
             }
+
+            // Apply label settings
             SetLabelSettings(newID);
         }
 
@@ -59,7 +70,7 @@ namespace RFB.Portfolio
                 currentID = newID;
 
                 // Set id
-                foreach (TextMeshProUGUI label in mainLabels)
+                foreach (TextMeshProUGUI label in labels)
                 {
                     LayoutManager.instance.ApplyLabelSettings(label, currentID);
                 }

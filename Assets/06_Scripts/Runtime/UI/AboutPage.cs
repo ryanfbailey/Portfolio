@@ -39,19 +39,19 @@ namespace RFB.Portfolio
         protected override void Awake()
         {
             base.Awake();
-            linkedInBtn.onClick.AddListener(LinkedInClick);
-            githubBtn.onClick.AddListener(GithubClick);
-            instagramBtn.onClick.AddListener(InstagramClick);
-            contactBtn.onClick.AddListener(ContactClick);
+            linkedInBtn.onClick += (LinkedInClick);
+            githubBtn.onClick += (GithubClick);
+            instagramBtn.onClick += (InstagramClick);
+            contactBtn.onClick += (ContactClick);
         }
         // Remove delegates
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            linkedInBtn.onClick.RemoveListener(LinkedInClick);
-            githubBtn.onClick.RemoveListener(GithubClick);
-            instagramBtn.onClick.RemoveListener(InstagramClick);
-            contactBtn.onClick.RemoveListener(ContactClick);
+            linkedInBtn.onClick -= (LinkedInClick);
+            githubBtn.onClick -= (GithubClick);
+            instagramBtn.onClick -= (InstagramClick);
+            contactBtn.onClick -= (ContactClick);
         }
         // Linked In Click
         private void LinkedInClick()
@@ -92,7 +92,6 @@ namespace RFB.Portfolio
 
             // Set up button
             contactBtn.SetMainText(LocalizationManager.instance.GetText("ABOUT_PAGE_BTN"));
-            contactBtn.SetPreferredWidth();
         }
         // Get fancy string
         private string GetFancyString(string content, string fontID, float fontSize)

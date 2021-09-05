@@ -50,6 +50,7 @@ namespace RFB.Portfolio
         public RawImage galleryImage;
         public RFBPButton galleryPrevButton;
         public RFBPButton galleryNextButton;
+        public RFBSwipeHandler galleryGesture;
 
         // Loader
         public string galleryLoaderSwatchID;
@@ -69,9 +70,10 @@ namespace RFB.Portfolio
             base.Awake();
             PortfolioManager.onProjectSelected += OnProjectSelected;
             PortfolioManager.onProjectGalleryItemSelected += OnGalleryItemSelected;
-            galleryPrevButton.onClick.AddListener(GalleryPrevClick);
-            galleryNextButton.onClick.AddListener(GalleryNextClick);
-            galleryPlayButton.onClick.AddListener(GalleryVideoPlay);
+            galleryPrevButton.onClick += GalleryPrevClick;
+            galleryNextButton.onClick += GalleryNextClick;
+            galleryPlayButton.onClick += GalleryVideoPlay;
+            galleryGesture.onSwipe += GallerySwipe;
         }
         // Destroy
         protected override void OnDestroy()
@@ -79,9 +81,10 @@ namespace RFB.Portfolio
             base.OnDestroy();
             PortfolioManager.onProjectSelected -= OnProjectSelected;
             PortfolioManager.onProjectGalleryItemSelected -= OnGalleryItemSelected;
-            galleryPrevButton.onClick.RemoveListener(GalleryPrevClick);
-            galleryNextButton.onClick.RemoveListener(GalleryNextClick);
-            galleryPlayButton.onClick.RemoveListener(GalleryVideoPlay);
+            galleryPrevButton.onClick -= GalleryPrevClick;
+            galleryNextButton.onClick -= GalleryNextClick;
+            galleryPlayButton.onClick -= GalleryVideoPlay;
+            galleryGesture.onSwipe -= GallerySwipe;
         }
 
         // Load assets
@@ -305,7 +308,7 @@ namespace RFB.Portfolio
                     }
                     else
                     {
-                        Log("Gallery Image Load - Success!\nName: " + galleryItem.thumbName);
+                        //Log("Gallery Image Load - Success!\nName: " + galleryItem.thumbName);
                         _galleryThumb = t;
                         SetGalleryTexture(_galleryThumb);
                     }
@@ -369,6 +372,18 @@ namespace RFB.Portfolio
         private void GalleryNextClick()
         {
             GalleryIterate(true);
+        }
+        // Swipe gesture
+        private void GallerySwipe(RFBSwipeGesture swipeGesture)
+        {
+            if (swipeGesture == RFBSwipeGesture.Right)
+            {
+                GalleryIterate(false);
+            }
+            else if (swipeGesture == RFBSwipeGesture.Left)
+            {
+                GalleryIterate(true);
+            }
         }
         // Play
         private void GalleryVideoPlay()

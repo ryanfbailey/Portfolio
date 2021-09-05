@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &750315052241476075
 RectTransform:
   m_ObjectHideFlags: 0
@@ -160,7 +160,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8186031412008479894}
   - component: {fileID: 8186031412008479889}
-  - component: {fileID: 7889089410392242454}
   m_Layer: 5
   m_Name: BTN_SIMPLE
   m_TagString: Untagged
@@ -202,65 +201,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03549519da61842f6be6af459af23fe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
-  m_Colors:
-    m_NormalColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_HighlightedColor: {r: 0.627451, g: 0.627451, b: 0.627451, a: 1}
-    m_PressedColor: {r: 0.4431373, g: 0.86666673, b: 0.5411765, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 8726086635448375839}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
-  defaultObject: {fileID: 0}
-  hoverObject: {fileID: 0}
-  pressObject: {fileID: 4976521223438336853}
-  disabledObject: {fileID: 0}
-  selectedObject: {fileID: 0}
+  toggleGroups:
+  - id: PRESS
+    invert: 0
+    states: 02000000
+    objects:
+    - {fileID: 4976521223438336853}
   disableTint: 0.4
-  canvasGroup: {fileID: 7889089410392242454}
+  canvasGroup: {fileID: 0}
+  autoResizeWidth: 0
+  labelPadding: 10
+  labels: []
   selectButton: 0
-  mainLabels:
-  - {fileID: 0}
-  labelPreferredPaddingX: 10
+  selectedObject: {fileID: 0}
+  outlineGraphic: {fileID: 8726086635448375839}
   defaultLabelID: BTN_DEFAULT
   hoverLabelID: BTN_HOVER
   pressLabelID: BTN_PRESS
+  disabledLabelID: BTN_DEFAULT
   selectedLabelID: BTN_SELECTED
-  outlineGraphic: {fileID: 8726086635448375839}
---- !u!225 &7889089410392242454
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8186031412008479895}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &8186031412512398039
 GameObject:
   m_ObjectHideFlags: 0

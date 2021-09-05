@@ -8,41 +8,34 @@ using TMPro;
 
 namespace RFB.Utilities
 {
-    public class RFBButton : Button
+    public class RFBButton : RFBInteractable
     {
-        #region HELPERS
-        [Header("Button Settings")]
-        // Default object
-        public GameObject defaultObject;
-        // Hover object
-        public GameObject hoverObject;
-        // Press object
-        public GameObject pressObject;
-        // Disabled object
-        public GameObject disabledObject;
-        // Selected object
-        public GameObject selectedObject;
-
-        [Header("Group Settings")]
+        #region LIFECYCLE
         // Disable tint
         public float disableTint = 0.4f;
         // Selected object
         public CanvasGroup canvasGroup;
 
-        // Hovered
-        public bool isHovered { get; private set; }
-        // Pressed
-        public bool isPressed { get; private set; }
+        [Header("Label Settings")]
+        // Auto resize
+        public bool autoResizeWidth = false;
+        // Label padding
+        public float labelPadding = 10f;
+        // Labels
+        public TextMeshProUGUI[] labels;
 
-        // Selected
-        public bool isDisabled { get; private set; }
-        // Selected
-        public bool isSelected { get; private set; }
-        // Select change
-        public static event Action<RFBButton, bool> onSelectChange;
-
+        [Header("Selection Settings")]
         // Selectable
         public bool selectButton = false;
+        // Selected object
+        public GameObject selectedObject;
+        // Selected
+        public bool isSelected { get; private set; }
+
+        // On Click
+        public Action onClick;
+        // Select change
+        public Action<bool> onSelectChange;
 
         // On awake
         protected override void Awake()
@@ -53,70 +46,44 @@ namespace RFB.Utilities
             {
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
+            if (selectButton)
+            {
+                isSelected = true;
+                SetSelected(false);
+            }
         }
+        #endregion
 
+        #region BUTTONS
         // On Enable
-        protected override void OnEnable()
+        protected virtual void OnEnable()
         {
-            base.OnEnable();
-            RefreshState();
-            onClick.AddListener(BtnClick);
+            btnHelper.onClick.AddListener(BtnClick);
         }
         // On Disable
-        protected override void OnDisable()
+        protected virtual void OnDisable()
         {
-            base.OnDisable();
-            onClick.RemoveListener(BtnClick);
-            isHovered = false;
-            isPressed = false;
-            RefreshState();
+            btnHelper.onClick.RemoveListener(BtnClick);
         }
         // Check click
-        private void BtnClick()
+        public virtual void BtnClick()
         {
+            // Set select
             if (selectButton)
             {
                 SetSelected(true);
             }
-        }
-        // Disable
-        public void SetDisabled(bool toDisabled)
-        {
-            isDisabled = toDisabled;
-            interactable = !toDisabled;
-            RefreshState();
-        }
-        // Hover enter
-        public override void OnPointerEnter(PointerEventData eventData)
-        {
-            isHovered = true;
-            base.OnPointerEnter(eventData);
-            RefreshState();
-        }
-        // Hover exit
-        public override void OnPointerExit(PointerEventData eventData)
-        {
-            isHovered = false;
-            base.OnPointerExit(eventData);
-            RefreshState();
-        }
-
-        // Press down
-        public override void OnPointerDown(PointerEventData eventData)
-        {
-            isPressed = true;
-            base.OnPointerDown(eventData);
-            RefreshState();
-        }
-        // Press up
-        public override void OnPointerUp(PointerEventData eventData)
-        {
-            isPressed = false;
-            base.OnPointerUp(eventData);
-            RefreshState();
+            // Click
+            else
+            {
+                if (onClick != null)
+                {
+                    onClick();
+                }
+            }
         }
         // Set selected
-        public void SetSelected(bool toSelected)
+        public virtual void SetSelected(bool toSelected)
         {
             // Skip
             if (!selectButton || isSelected == toSelected)
@@ -127,83 +94,71 @@ namespace RFB.Utilities
             // Set
             isSelected = toSelected;
 
+            // Toggle
+            if (selectedObject != null)
+            {
+                selectedObject.SetActive(isSelected);
+            }
+
             // Refresh
             RefreshState();
 
             // Set
             if (onSelectChange != null)
             {
-                onSelectChange(this, isSelected);
+                onSelectChange(isSelected);
             }
         }
         // Refresh state
-        protected virtual void RefreshState()
+        protected override void SetState(RFBInteractiveState newState)
         {
-            if (defaultObject != null)
-            {
-                defaultObject.SetActive((!isHovered && !isPressed && !isSelected || !interactable));
-            }
-            if (pressObject != null)
-            {
-                pressObject.SetActive(interactable && isPressed);
-            }
-            if (hoverObject != null)
-            {
-                hoverObject.SetActive(interactable && isHovered);
-            }
-            if (disabledObject != null)
-            {
-                disabledObject.SetActive(!interactable);
-            }
-            if (selectedObject != null)
-            {
-                selectedObject.SetActive(isSelected);
-            }
+            // Base
+            base.SetState(newState);
+
+            // Canvas group
             if (canvasGroup != null)
             {
-                canvasGroup.alpha = interactable ? 1f : disableTint;
+                canvasGroup.alpha = interactiveState == RFBInteractiveState.Disabled ? disableTint : 1f;
             }
         }
         #endregion
 
-        #region RESIZING
-        // Main labels
-        public TextMeshProUGUI[] mainLabels;
-        // Label ideal padding
-        public float labelPreferredPaddingX;
-
+        #region LABEL
         // Apply all text
         public void SetMainText(string newText)
         {
-            if (mainLabels != null)
+            // Set label
+            if (labels != null)
             {
-                foreach (TextMeshProUGUI label in mainLabels)
+                foreach (TextMeshProUGUI label in labels)
                 {
                     label.text = newText;
                 }
             }
-        }
-
-        // Get preferred width
-        public float GetPreferredWidth()
-        {
-            float idealWidth = 0f;
-            if (mainLabels != null)
+            // Auto resize
+            if (autoResizeWidth)
             {
-                foreach (TextMeshProUGUI label in mainLabels)
-                {
-                    idealWidth = Mathf.Max(idealWidth, label.preferredWidth);
-                    //Debug.Log(label.text + " Pref: " + label.preferredWidth);
-                }
+                ResizeWidth();
             }
-            return idealWidth + labelPreferredPaddingX * 2f;
         }
 
-        // Set
-        public void SetPreferredWidth()
+        // Resize width
+        public void ResizeWidth()
         {
-            float prefWidth = GetPreferredWidth();
-            GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, prefWidth);
+            // Set label
+            if (labels != null)
+            {
+                // Get width
+                float width = 0f;
+                foreach (TextMeshProUGUI label in labels)
+                {
+                    width = Mathf.Max(width, label.preferredWidth);
+                }
+                // Add padding
+                width += labelPadding * 2f;
+                // Set width
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            }
         }
         #endregion
     }

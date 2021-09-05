@@ -52,15 +52,10 @@ namespace RFB.Utilities
             {
                 Log("No container found", LogType.Error);
             }
-
-            // Add delegate
-            RFBButton.onSelectChange += OnSelectChange;
         }
         // On destroy
         protected virtual void OnDestroy()
         {
-            // Remove delegate
-            RFBButton.onSelectChange -= OnSelectChange;
             // Unload table
             UnloadTable();
         }
@@ -179,6 +174,10 @@ namespace RFB.Utilities
                     if (cellButton != null && cellButton.selectButton)
                     {
                         cellButton.SetSelected(false);
+                        cellButton.onSelectChange = delegate (bool toSelected)
+                        {
+                            OnSelectChange(cellButton, toSelected);
+                        };
                     }
 
                     // Load
