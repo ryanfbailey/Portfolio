@@ -36,6 +36,8 @@ namespace RFB.Portfolio
         public TextMeshProUGUI subtitleLabel;
         public string descriptionTemplateID;
         public TextMeshProUGUI descriptionLabel;
+        public float websiteMargin = 50f;
+        public RFBPButton websiteButton;
 
         // Gallery
         [Header("Project Gallery Settings")]
@@ -48,11 +50,14 @@ namespace RFB.Portfolio
         public string galleryTotalTemplateID;
         public TextMeshProUGUI galleryTotalLabel;
         public RawImage galleryImage;
+
+        // Gallery Buttons
         public RFBPButton galleryPrevButton;
         public RFBPButton galleryNextButton;
         public RFBSwipeHandler galleryGesture;
 
         // Loader
+        [Header("Project Gallery Loader")]
         public string galleryLoaderSwatchID;
         public RFBProgressBar galleryLoadProgress;
 
@@ -69,6 +74,7 @@ namespace RFB.Portfolio
             base.Awake();
             PortfolioManager.onProjectSelected += OnProjectSelected;
             PortfolioManager.onProjectGalleryItemSelected += OnGalleryItemSelected;
+            websiteButton.onClick += WebsiteClick;
             galleryPrevButton.onClick += GalleryPrevClick;
             galleryNextButton.onClick += GalleryNextClick;
             galleryPlayButton.onClick += GalleryVideoPlay;
@@ -80,6 +86,7 @@ namespace RFB.Portfolio
             base.OnDestroy();
             PortfolioManager.onProjectSelected -= OnProjectSelected;
             PortfolioManager.onProjectGalleryItemSelected -= OnGalleryItemSelected;
+            websiteButton.onClick -= WebsiteClick;
             galleryPrevButton.onClick -= GalleryPrevClick;
             galleryNextButton.onClick -= GalleryNextClick;
             galleryPlayButton.onClick -= GalleryVideoPlay;
@@ -96,6 +103,9 @@ namespace RFB.Portfolio
             infoBackgroundGradient.color = LayoutManager.instance.GetSwatchColor(infoBackgroundGradientSwatchID);
             galleryBackground.color = LayoutManager.instance.GetSwatchColor(galleryBackgroundSwatchID);
             galleryLoadProgress.progressImage.color = LayoutManager.instance.GetSwatchColor(galleryLoaderSwatchID);
+
+            // Set button
+            websiteButton.SetMainText(LocalizationManager.instance.GetText("PROJECT_WEBSITE_BTN"));
 
             // Set label templates
             LayoutManager.instance.ApplyLabelSettings(titleLabel, titleTemplateID);
@@ -218,12 +228,42 @@ namespace RFB.Portfolio
             // Set description
             descriptionLabel.text = "\n" + project.description + "\n\n" + project.contribution;
 
+            // Adjust website
+            bool hasWebsite = !string.IsNullOrEmpty(project.website);
+            websiteButton.gameObject.SetActive(hasWebsite);
+
+            // Adjust gallery
+            bool hasGallery = project.gallery != null && project.gallery.Length > 0;
+            galleryImageContainer.gameObject.SetActive(hasGallery);
+            galleryTextContainer.gameObject.SetActive(hasGallery);
+
             // Select cell
             selectTable.SelectCell(0, newIndex);
             selectTable.RefreshCellSelections();
 
             // Resize
             PageManager.instance.ResizePages();
+        }
+        //
+        private void WebsiteClick()
+        {
+            // Get project index
+            int projectIndex = PortfolioManager.instance.selectedProject;
+            if (PortfolioManager.instance.projects == null || projectIndex < 0 || projectIndex >= PortfolioManager.instance.projects.Length)
+            {
+                return;
+            }
+
+            // Get website url
+            ProjectData p = PortfolioManager.instance.projects[projectIndex];
+            string url = p.website;
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+
+            // Apply
+            PortfolioManager.instance.OpenWebURL(url);
         }
         #endregion
 
@@ -458,6 +498,10 @@ namespace RFB.Portfolio
             selectTable.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, topHeight, tableHeight);
             topHeight += tableHeight;
 
+            // Check sections
+            bool hasWebsite = websiteButton.gameObject.activeSelf;
+            bool hasGallery = galleryImageContainer.gameObject.activeSelf;
+
             // Use portrait if gallery is bigger than half
             float maxWidth = contentContainer.rect.width;
             float galWidth = maxWidth;
@@ -465,7 +509,7 @@ namespace RFB.Portfolio
             /*
             float galWidth = galleryWidth;
             bool isPortrait = LayoutManager.instance.orientation == LayoutOrientation.Portrait;
-            if (galWidth + galleryMargin > maxWidth * .65f)
+            if (hasGallery || galWidth + galleryMargin > maxWidth * .65f)
             {
                 isPortrait = true;
                 galWidth = Mathf.Min(maxWidth, galWidth);
@@ -495,19 +539,36 @@ namespace RFB.Portfolio
             descriptionLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, descriptionHeight);
             leftHeight += descriptionHeight;
 
-            // Adjust gallery image container
-            float rightHeight = isPortrait ? leftHeight + galleryMargin : padding;
-            float galleryX = isPortrait ? (maxWidth - galWidth) / 2f : 0f;
-            galleryImageContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, galleryX, galWidth);
-            float galleryHeight = (galWidth - 40f) * (9f / 16f) + 40f;
-            galleryImageContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightHeight, galleryHeight);
-            rightHeight += galleryHeight;
+            // Add website button
+            if (hasWebsite)
+            {
+                websiteButton.ResizeWidth();
+                float websiteWidth = websiteButton.rectTransform.rect.width;
+                websiteButton.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, textWidth - websiteWidth, websiteWidth);
+                leftHeight += websiteMargin;
+                float websiteHeight = websiteButton.rectTransform.rect.height;
+                websiteButton.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, websiteHeight);
+                leftHeight += websiteHeight;
+            }
 
-            // Adjust gallery text
-            float galleryTextHeight = galleryTextContainer.rect.height;
-            galleryTextContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, galleryX, galWidth);
-            galleryTextContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightHeight, galleryTextHeight);
-            rightHeight += galleryTextHeight;
+            // Gallery
+            float rightHeight = 0f;
+            if (hasGallery)
+            {
+                // Adjust gallery image container
+                rightHeight = isPortrait ? leftHeight + galleryMargin : padding;
+                float galleryX = isPortrait ? (maxWidth - galWidth) / 2f : 0f;
+                galleryImageContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, galleryX, galWidth);
+                float galleryHeight = (galWidth - 40f) * (9f / 16f) + 40f;
+                galleryImageContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightHeight, galleryHeight);
+                rightHeight += galleryHeight;
+
+                // Adjust gallery text
+                float galleryTextHeight = galleryTextContainer.rect.height;
+                galleryTextContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, galleryX, galWidth);
+                galleryTextContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightHeight, galleryTextHeight);
+                rightHeight += galleryTextHeight;
+            }
 
             // Adjust container
             float infoHeight = Mathf.Max(leftHeight, rightHeight);

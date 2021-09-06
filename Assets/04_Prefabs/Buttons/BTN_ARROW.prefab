@@ -289,12 +289,13 @@ MonoBehaviour:
   labels: []
   selectButton: 0
   selectedObject: {fileID: 0}
-  outlineGraphic: {fileID: 2406692528628431339}
   defaultLabelID: BTN_DEFAULT
   hoverLabelID: BTN_HOVER
   pressLabelID: BTN_PRESS
   disabledLabelID: BTN_DISABLE
   selectedLabelID: BTN_SELECTED
+  tintGraphics:
+  - {fileID: 2406692528628431339}
 --- !u!225 &616019603910643618
 CanvasGroup:
   m_ObjectHideFlags: 0

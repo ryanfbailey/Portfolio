@@ -50,6 +50,9 @@ public struct ProjectData
     // Contribution
     public string contribution;
 
+    // Website URL
+    public string website;
+
     // Icon
     public Texture2D icon;
     // Gallery Images 

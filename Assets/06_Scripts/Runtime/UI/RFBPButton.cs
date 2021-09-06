@@ -10,8 +10,6 @@ namespace RFB.Portfolio
     public class RFBPButton : RFBButton
     {
         [Header("Layout Overrides")]
-        // Graphic
-        public Graphic outlineGraphic;
         // Default
         public string defaultLabelID;
         // Hover
@@ -22,6 +20,8 @@ namespace RFB.Portfolio
         public string disabledLabelID;
         // Selected
         public string selectedLabelID;
+        // Graphic
+        public Graphic[] tintGraphics;
 
         // Current id
         public string currentID { get; private set; }
@@ -76,10 +76,13 @@ namespace RFB.Portfolio
                 }
 
                 // Set color
-                if (outlineGraphic != null)
+                if (tintGraphics != null)
                 {
                     string colorID = LayoutManager.instance.GetLabelSettings(currentID).labelSwatchID;
-                    outlineGraphic.color = LayoutManager.instance.GetSwatchColor(colorID);
+                    foreach (Graphic g in tintGraphics)
+                    {
+                        g.color = LayoutManager.instance.GetSwatchColor(colorID);
+                    }
                 }
             }
         }
