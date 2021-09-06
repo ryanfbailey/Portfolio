@@ -497,6 +497,7 @@ namespace RFB.Portfolio
             float tableHeight = selectTable.rectTransform.rect.height;
             selectTable.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, topHeight, tableHeight);
             topHeight += tableHeight;
+            selectTable.RefreshCanScroll();
 
             // Check sections
             bool hasWebsite = websiteButton.gameObject.activeSelf;

@@ -256,7 +256,6 @@ namespace RFB.Utilities
 
             // Get viewport sizes
             float altSize = isVertical ? rectTransform.rect.width : rectTransform.rect.height;
-            float minSize = isVertical ? rectTransform.rect.height : rectTransform.rect.width;
 
             // Add header
             float mainSize = headerSize;
@@ -334,6 +333,13 @@ namespace RFB.Utilities
             container.SetSizeWithCurrentAnchors(isVertical ? RectTransform.Axis.Vertical : RectTransform.Axis.Horizontal, mainSize);
 
             // Adjust scrolling
+            RefreshCanScroll();
+        }
+        // Refresh can scroll
+        public void RefreshCanScroll()
+        {
+            float minSize = isVertical ? rectTransform.rect.height : rectTransform.rect.width;
+            float mainSize = isVertical ? container.rect.height : container.rect.width;
             bool allowed = mainSize > minSize;
             scroller.horizontal = isVertical ? false : allowed;
             scroller.vertical = isVertical ? allowed : false;
