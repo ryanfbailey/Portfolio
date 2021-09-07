@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   texture: {fileID: 0}
   rawImage: {fileID: 327327767}
-  movementSpeed: {x: 0.08, y: 0.02}
+  movementSpeed: {x: 0, y: 0}
 --- !u!1 &489921926
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,7 +1555,7 @@ MonoBehaviour:
     labelFontStyles: 0
     labelFont: {fileID: 11400000, guid: 94859f12801bb47e899dee3e9c02f5c3, type: 2}
     labelFontMaterial: {fileID: 8504694929512631841, guid: 94859f12801bb47e899dee3e9c02f5c3, type: 2}
-  - labelID: PROJECT_SUBTITLE
+  - labelID: PROJECT_INFO_VALUE
     labelSwatchID: DARK_GRAY
     labelFontSize: 22
     labelFontStyles: 0
@@ -1591,6 +1591,12 @@ MonoBehaviour:
     labelFontStyles: 0
     labelFont: {fileID: 11400000, guid: 7e245bd23d7a84d29a8c4719a4b75241, type: 2}
     labelFontMaterial: {fileID: 8745845537854828798, guid: 7e245bd23d7a84d29a8c4719a4b75241, type: 2}
+  - labelID: PROJECT_INFO_KEY
+    labelSwatchID: DARK_GRAY
+    labelFontSize: 22
+    labelFontStyles: 0
+    labelFont: {fileID: 11400000, guid: 94859f12801bb47e899dee3e9c02f5c3, type: 2}
+    labelFontMaterial: {fileID: 8504694929512631841, guid: 94859f12801bb47e899dee3e9c02f5c3, type: 2}
 --- !u!114 &1775972115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1603,7 +1609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc1980e0b22f41eca98e07f973d0d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugPlatform: 1
+  debugPlatform: 3
+  targetFrameRate: -1
   tabletMinSize: 6.5
   loaders:
   - id: GOOGLE
@@ -1957,7 +1964,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   texture: {fileID: 0}
   rawImage: {fileID: 1897634741}
-  movementSpeed: {x: 0.08, y: 0.02}
+  movementSpeed: {x: 0, y: 0}
 --- !u!114 &1897634741
 MonoBehaviour:
   m_ObjectHideFlags: 0

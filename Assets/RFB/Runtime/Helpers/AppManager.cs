@@ -33,6 +33,9 @@ namespace RFB.Utilities
         public AppPlatform debugPlatform = AppPlatform.Desktop;
 #endif
 
+        [Header("Additional Settings")]
+        // Target frame rate
+        public int targetFrameRate = -1;
         // Tablet min size in inches
         public float tabletMinSize = 6.5f;
 
@@ -51,6 +54,7 @@ namespace RFB.Utilities
         protected override void Awake()
         {
             base.Awake();
+            Application.targetFrameRate = targetFrameRate;
             platform = AppPlatform.Unknown;
             isLoading = true;
             loadProgress = 0f;

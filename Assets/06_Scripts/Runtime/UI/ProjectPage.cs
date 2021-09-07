@@ -32,8 +32,11 @@ namespace RFB.Portfolio
         public RectTransform infoContainer;
         public string titleTemplateID;
         public TextMeshProUGUI titleLabel;
-        public string subtitleTemplateID;
-        public TextMeshProUGUI subtitleLabel;
+        public float infoMargin = 10f;
+        public string infoKeyTemplateID;
+        public TextMeshProUGUI infoKeyLabel;
+        public string infoValueTemplateID;
+        public TextMeshProUGUI infoValueLabel;
         public string descriptionTemplateID;
         public TextMeshProUGUI descriptionLabel;
         public float websiteMargin = 50f;
@@ -109,7 +112,8 @@ namespace RFB.Portfolio
 
             // Set label templates
             LayoutManager.instance.ApplyLabelSettings(titleLabel, titleTemplateID);
-            LayoutManager.instance.ApplyLabelSettings(subtitleLabel, subtitleTemplateID);
+            LayoutManager.instance.ApplyLabelSettings(infoKeyLabel, infoKeyTemplateID);
+            LayoutManager.instance.ApplyLabelSettings(infoValueLabel, infoValueTemplateID);
             LayoutManager.instance.ApplyLabelSettings(descriptionLabel, descriptionTemplateID);
             LayoutManager.instance.ApplyLabelSettings(galleryDescriptionLabel, galleryDescriptionTemplateID);
             LayoutManager.instance.ApplyLabelSettings(galleryTotalLabel, galleryTotalTemplateID);
@@ -216,14 +220,24 @@ namespace RFB.Portfolio
             titleLabel.text = project.title;
             titleLabel.characterSpacing = -5f;
 
-            // Set subtitle
-            string subtitle = "";
-            subtitle += LocalizationManager.instance.GetText("PROJECT_ROLE") + ": " + project.role;
-            subtitle += "\n" + LocalizationManager.instance.GetText("PROJECT_" + project.type.ToString().ToUpper()) + ": " + project.company;
-            subtitle += "\n" + LocalizationManager.instance.GetText("PROJECT_SKILLS") + ": " + project.skills.Replace(",", ", ");
-            subtitle += "\n" + LocalizationManager.instance.GetText("PROJECT_PLATFORMS") + ": " + project.platforms.Replace(",", ", ");
-            subtitle += "\n" + LocalizationManager.instance.GetText("PROJECT_RELEASE") + ": " + project.release;
-            subtitleLabel.text = subtitle;
+            // Set info key & value
+            string infoKey = "";
+            string infoValue = "";
+            Dictionary<string, string> infoData = GetProjectInfo(project);
+            foreach (string key in infoData.Keys)
+            {
+                // New Line
+                if (!string.IsNullOrEmpty(infoKey))
+                {
+                    infoKey += "\n";
+                    infoValue += "\n";
+                }
+                // Add info
+                infoKey += key + ": ";
+                infoValue += infoData[key];
+            }
+            infoKeyLabel.text = infoKey;
+            infoValueLabel.text = infoValue;
 
             // Set description
             descriptionLabel.text = "\n" + project.description + "\n\n" + project.contribution;
@@ -244,7 +258,36 @@ namespace RFB.Portfolio
             // Resize
             PageManager.instance.ResizePages();
         }
-        //
+        // Get info
+        private Dictionary<string, string> GetProjectInfo(ProjectData project)
+        {
+            // Begin
+            Dictionary<string, string> result = new Dictionary<string, string>();
+
+            // Add Company
+            string key = LocalizationManager.instance.GetText("PROJECT_COMPANY_" + project.type.ToString().ToUpper());
+            result[key] = project.company;
+
+            // Add Role
+            key = LocalizationManager.instance.GetText("PROJECT_ROLE");
+            result[key] = project.role;
+
+            // Add Release
+            key = LocalizationManager.instance.GetText("PROJECT_RELEASE");
+            result[key] = project.release;
+
+            // Add Skills
+            key = LocalizationManager.instance.GetText("PROJECT_SKILLS");
+            result[key] = project.skills.Replace(",", ", ");
+
+            // Add Platforms
+            key = LocalizationManager.instance.GetText("PROJECT_PLATFORMS");
+            result[key] = project.platforms.Replace(",", ", ");
+
+            // Return
+            return result;
+        }
+        // Click website
         private void WebsiteClick()
         {
             // Get project index
@@ -528,11 +571,16 @@ namespace RFB.Portfolio
             titleLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, titleHeight);
             leftHeight += titleHeight + textPadding;
 
-            // Add subtitle
-            float subtitleHeight = subtitleLabel.GetPreferredValues(subtitleLabel.text, textWidth, 10000f).y;
-            subtitleLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, textWidth);
-            subtitleLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, subtitleHeight);
-            leftHeight += subtitleHeight + textPadding;
+            // Add info key
+            Vector2 infoKeySize = infoKeyLabel.GetPreferredValues(infoKeyLabel.text, 10000f, 10000f);
+            infoKeyLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, infoKeySize.x);
+            infoKeyLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, infoKeySize.y);
+
+            // Add info value
+            float infoValueWidth = textWidth - infoKeySize.x - infoMargin;
+            infoValueLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, infoKeySize.x + infoMargin, infoValueWidth);
+            infoValueLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, infoKeySize.y);
+            leftHeight += infoKeySize.y + textPadding;
 
             // Add description
             float descriptionHeight = descriptionLabel.GetPreferredValues(descriptionLabel.text, textWidth, 10000f).y;
