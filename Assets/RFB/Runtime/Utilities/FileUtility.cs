@@ -259,6 +259,21 @@ namespace RFB.Utilities
         #endregion
 
         #region HELPERS
+        // Current
+        public static int currentLoaders = 0;
+#if UNITY_WEBGL
+        // Total concurrent at a time
+        public const int TOTAL_CONCURRENT = 1;
+#else
+        public const int TOTAL_CONCURRENT = 2;
+#endif
+
+        // Loading
+        public static bool AreFilesLoading()
+        {
+            return currentLoaders > 0;
+        }
+
         // Log
         private static void Log(string log, LogType type = LogType.Log)
         {
@@ -277,6 +292,9 @@ namespace RFB.Utilities
             // On progress
             private Action<float> _onProgress;
 
+            //
+            public bool isLoading { get; private set; }
+
             // Dont destroy
             private void Awake()
             {
@@ -292,6 +310,23 @@ namespace RFB.Utilities
                 _onComplete = onComplete;
                 // Set on progress
                 _onProgress = onProgress;
+
+                // Begin loading
+                StartCoroutine(WaitToBegin());
+            }
+
+            // Wait
+            private IEnumerator WaitToBegin()
+            {
+                // Wait
+                while (currentLoaders >= TOTAL_CONCURRENT)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+
+                // Update
+                currentLoaders++;
+                isLoading = true;
 
                 // Begin loading
                 _request.SendWebRequest();
@@ -324,6 +359,13 @@ namespace RFB.Utilities
             // Load complete
             private void LoadComplete(bool destroy)
             {
+                // Complete
+                if (isLoading)
+                {
+                    currentLoaders--;
+                    isLoading = false;
+                }
+
                 // Early
                 if (!_request.isDone)
                 {
@@ -375,6 +417,6 @@ namespace RFB.Utilities
                 }
             }
         }
-        #endregion
+#endregion
     }
 }
