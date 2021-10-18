@@ -24,8 +24,8 @@ namespace RFB.Portfolio
         public Image infoBackground;
         public string infoBackgroundGradientSwatchID;
         public Image infoBackgroundGradient;
-        public string galleryBackgroundSwatchID;
-        public Image galleryBackground;
+        //public string galleryBackgroundSwatchID;
+        //public Image galleryBackground;
 
         // Info
         [Header("Project Info Settings")]
@@ -45,8 +45,8 @@ namespace RFB.Portfolio
         // Gallery
         [Header("Project Gallery Settings")]
         public float galleryMargin = 50f;
-        public float galleryMinWidth = 450f;
-        public ProjectGallery gallery;
+        public ProjectGalleryThumb galleryThumbCell;
+        public RFBTable galleryTable;
         /*
         public float galleryWidth = 300f;
         public RectTransform galleryImageContainer;
@@ -112,7 +112,7 @@ namespace RFB.Portfolio
             // Set background colors
             infoBackground.color = LayoutManager.instance.GetSwatchColor(infoBackgroundSwatchID);
             infoBackgroundGradient.color = LayoutManager.instance.GetSwatchColor(infoBackgroundGradientSwatchID);
-            galleryBackground.color = LayoutManager.instance.GetSwatchColor(galleryBackgroundSwatchID);
+            //galleryBackground.color = LayoutManager.instance.GetSwatchColor(galleryBackgroundSwatchID);
             //galleryLoadProgress.progressImage.color = LayoutManager.instance.GetSwatchColor(galleryLoaderSwatchID);
 
             // Set button
@@ -153,39 +153,82 @@ namespace RFB.Portfolio
         }
         #endregion
 
-        #region SELECTION
+        #region TABLE
         // Single section
-        public int GetSectionCount()
+        public int GetSectionCount(RFBTable table)
         {
             return 1;
         }
         // No section prefab
-        public RectTransform GetSectionPrefab(int sectionIndex)
+        public RectTransform GetSectionPrefab(RFBTable table, int sectionIndex)
         {
             return null;
         }
         // No section
-        public Vector2 LoadSection(int sectionIndex, RectTransform section)
+        public Vector2 LoadSection(RFBTable table, int sectionIndex, RectTransform section)
         {
             return Vector2.one * -1f;
         }
 
         // Cell per project
-        public int GetCellCount(int sectionIndex)
+        public int GetCellCount(RFBTable table, int sectionIndex)
         {
-            return PortfolioManager.instance.projects.Length;
+            if (table == selectTable)
+            {
+                return PortfolioManager.instance.projects.Length;
+            }
+            else if (table == galleryTable)
+            {
+                return GetTotalGalleryThumbs();
+            }
+            return 0;
         }
         // Cell prefab
-        public RectTransform GetCellPrefab(int sectionIndex, int cellIndex)
+        public RectTransform GetCellPrefab(RFBTable table, int sectionIndex, int cellIndex)
         {
-            return selectTableCell.GetComponent<RectTransform>();
+            if (table == selectTable)
+            {
+                return selectTableCell.GetComponent<RectTransform>();
+            }
+            else if (table == galleryTable)
+            {
+                return galleryThumbCell.GetComponent<RectTransform>();
+            }
+            return null;
         }
         // Load cell
-        public Vector2 LoadCell(int sectionIndex, int cellIndex, RectTransform cell)
+        public Vector2 LoadCell(RFBTable table, int sectionIndex, int cellIndex, RectTransform cell)
         {
-            // Only works since single cell
-            int pIndex = selectTable.GetCellIndex(sectionIndex, cellIndex);
+            if (table == selectTable)
+            {
+                int pIndex = selectTable.GetCellIndex(sectionIndex, cellIndex);
+                return LoadProjectCell(cell, pIndex);
+            }
+            else if (table == galleryTable)
+            {
+                return LoadGalleryThumb(cell, cellIndex);
+            }
+            return Vector2.zero;
+        }
+        // Select cell
+        public void SelectCell(RFBTable table, int sectionIndex, int cellIndex)
+        {
+            if (table == selectTable)
+            {
+                int pIndex = selectTable.GetCellIndex(sectionIndex, cellIndex);
+                SelectProject(pIndex);
+            }
+            else if (table == galleryTable)
+            {
 
+            }
+        }
+        #endregion
+
+        #region SELECTION
+        // Load cell
+        private Vector2 LoadProjectCell(RectTransform cell, int pIndex)
+        {
             // Get data
             ProjectData project = PortfolioManager.instance.projects[pIndex];
 
@@ -202,13 +245,9 @@ namespace RFB.Portfolio
             // Return full stretch
             return cell.rect.size;
         }
-
-        // Select cell
-        public void SelectCell(int sectionIndex, int cellIndex)
+        // Select a project
+        private void SelectProject(int pIndex)
         {
-            // Only works since single cell
-            int pIndex = selectTable.GetCellIndex(sectionIndex, cellIndex);
-            // Select
             PortfolioManager.instance.SelectProject(pIndex);
         }
         #endregion
@@ -257,7 +296,8 @@ namespace RFB.Portfolio
             websiteButton.gameObject.SetActive(hasWebsite);
 
             // Adjust gallery
-            gallery.LoadThumbs();
+            galleryTable.LoadTable(this);
+            galleryTable.SelectCell(0, 0);
 
             // Select cell
             selectTable.SelectCell(0, newIndex);
@@ -318,8 +358,56 @@ namespace RFB.Portfolio
         }
         #endregion
 
-        /*
         #region GALLERY
+        // Get gallery
+        private GalleryItemData[] GetCurrentGalleryItems()
+        {
+            // No selected project
+            int projectIndex = PortfolioManager.instance.selectedProject;
+            if (PortfolioManager.instance.projects == null || projectIndex < 0 || projectIndex >= PortfolioManager.instance.projects.Length)
+            {
+                return null;
+            }
+
+            // No project gallery
+            ProjectData project = PortfolioManager.instance.projects[projectIndex];
+            if (project.gallery == null || project.gallery.Length == 0)
+            {
+                return null;
+            }
+
+            // Return gallery
+            return project.gallery;
+        }
+        // Get total current gallery items
+        private int GetTotalGalleryThumbs()
+        {
+            GalleryItemData[] items = GetCurrentGalleryItems();
+            return items == null ? 0 : items.Length;
+        }
+        // Load gallery thumb
+        private Vector2 LoadGalleryThumb(RectTransform cell, int gIndex)
+        {
+            // Items not found
+            GalleryItemData[] items = GetCurrentGalleryItems();
+            if (items == null || gIndex < 0 || gIndex >= items.Length)
+            {
+                return Vector2.zero;
+            }
+
+            // Load thumb
+            GalleryItemData thumbData = items[gIndex];
+            ProjectGalleryThumb thumb = cell.GetComponent<ProjectGalleryThumb>();
+            if (thumb != null)
+            {
+                thumb.Load(thumbData);
+            }
+
+            // Return container height as square
+            float size = galleryTable.rectTransform.rect.height;
+            return new Vector2(size, size);
+        }
+        /*
         // Placeholder image
         public Texture2D placeholderImage;
         // Last gallery thumb
@@ -536,8 +624,8 @@ namespace RFB.Portfolio
             // Apply
             PortfolioManager.instance.SelectGalleryItem(galleryIndex);
         }
-        #endregion
         */
+        #endregion
 
         #region RESIZE
         // Project page
@@ -554,44 +642,41 @@ namespace RFB.Portfolio
 
             // Check sections
             bool hasWebsite = websiteButton.gameObject.activeSelf;
-            bool hasGallery = gallery.gameObject.activeSelf;
+            bool hasGallery = galleryTable.totalCellsPerSection != null;
 
-            // Use portrait if gallery is bigger than half
+            // Determine text sizing
             float maxWidth = contentContainer.rect.width;
-            float galleryWidth = galleryMinWidth;
-            bool isPortrait = !hasGallery || galleryMinWidth + galleryMargin >= maxWidth * 0.4f;
+            Vector2 titleSize = titleLabel.GetPreferredValues(titleLabel.text, maxWidth, 10000f);
+            Vector2 infoKeySize = infoKeyLabel.GetPreferredValues(infoKeyLabel.text, maxWidth, 10000f);
+            Vector2 infoValueSize = infoValueLabel.GetPreferredValues(infoValueLabel.text, maxWidth - infoKeySize.x - infoMargin, 10000f);
+            float textWidth = Mathf.Max(titleSize.x, infoKeySize.x + infoMargin + infoValueSize.x);
+            float textHeight = titleSize.y + textPadding + Mathf.Max(infoKeySize.y, infoValueSize.y);
 
-            // Stretch gallery
-            if (isPortrait)
-            {
-                galleryWidth = maxWidth;
-            }
+            // Determine portrait mode & gallery width
+            bool isPortrait = textWidth + infoMargin > maxWidth * .5f;
+            float galleryWidth = maxWidth + (isPortrait ? 0 : -textWidth - infoMargin);
 
             // Add margin
             float padding = PageManager.instance.pageMinPadding;
-            float leftHeight = PageManager.instance.pageMinPadding;
+            float leftHeight = padding;
 
             // Add title
-            float textWidth = maxWidth - (isPortrait ? 0f : galleryWidth + galleryMargin);
-            float titleHeight = titleLabel.GetPreferredValues(titleLabel.text, textWidth, 10000f).y;
             titleLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, textWidth);
-            titleLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, titleHeight);
-            leftHeight += titleHeight + textPadding;
+            titleLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, titleSize.y);
+            leftHeight += titleSize.y + textPadding;
 
             // Add info key
-            Vector2 infoKeySize = infoKeyLabel.GetPreferredValues(infoKeyLabel.text, 10000f, 10000f);
             infoKeyLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, infoKeySize.x);
             infoKeyLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, infoKeySize.y);
 
             // Add info value
-            float infoValueWidth = textWidth - infoKeySize.x - infoMargin;
-            infoValueLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, infoKeySize.x + infoMargin, infoValueWidth);
-            infoValueLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, infoKeySize.y);
-            leftHeight += infoKeySize.y + textPadding;
+            infoValueLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, infoKeySize.x + infoMargin, infoValueSize.x);
+            infoValueLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, infoValueSize.y);
+            leftHeight += Mathf.Max(infoKeySize.y, infoValueSize.y) + textPadding;
 
             // Add description
-            float descriptionHeight = descriptionLabel.GetPreferredValues(descriptionLabel.text, textWidth, 10000f).y;
-            descriptionLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, textWidth);
+            float descriptionHeight = descriptionLabel.GetPreferredValues(descriptionLabel.text, maxWidth, 10000f).y;
+            descriptionLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, maxWidth);
             descriptionLabel.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, leftHeight, descriptionHeight);
             leftHeight += descriptionHeight;
 
@@ -608,21 +693,33 @@ namespace RFB.Portfolio
             }
 
             // Gallery
-            float rightHeight = isPortrait ? leftHeight + galleryMargin : padding;
+            float rightHeight = isPortrait ? leftHeight : padding;
             if (hasGallery)
             {
-                float galleryHeight = gallery.LayoutThumbs(galleryWidth);
-                gallery.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0f, galleryWidth);
-                gallery.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightHeight, galleryHeight);
+                // Add margin
+                if (isPortrait)
+                {
+                    rightHeight += galleryMargin;
+                }
+                float galleryHeight = textHeight;
+                galleryTable.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0f, galleryWidth);
+                bool needsRefresh = (galleryTable.rectTransform.rect.height != galleryHeight);
+                galleryTable.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, rightHeight, galleryHeight);
                 rightHeight += galleryHeight;
+
+                // Reload
+                if (needsRefresh)
+                {
+                    galleryTable.LoadTable(this);
+                }
             }
 
             // Adjust container
-            float infoHeight = Mathf.Max(leftHeight, rightHeight);
-            infoContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, topHeight, infoHeight);
+            float totalHeight = Mathf.Max(leftHeight, rightHeight) + padding;
+            infoContainer.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, topHeight, totalHeight);
 
             // Set height
-            return topHeight + infoHeight;
+            return topHeight + totalHeight;
         }
         #endregion
     }

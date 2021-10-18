@@ -9,17 +9,17 @@ namespace RFB.Utilities
     public interface RFBTableDelegate
     {
         // Section
-        int GetSectionCount();
-        RectTransform GetSectionPrefab(int sectionIndex);
-        Vector2 LoadSection(int sectionIndex, RectTransform section);
+        int GetSectionCount(RFBTable table);
+        RectTransform GetSectionPrefab(RFBTable table, int sectionIndex);
+        Vector2 LoadSection(RFBTable table, int sectionIndex, RectTransform section);
 
         // Cells
-        int GetCellCount(int sectionIndex);
-        RectTransform GetCellPrefab(int sectionIndex, int cellIndex);
-        Vector2 LoadCell(int sectionIndex, int cellIndex, RectTransform cell);
+        int GetCellCount(RFBTable table, int sectionIndex);
+        RectTransform GetCellPrefab(RFBTable table, int sectionIndex, int cellIndex);
+        Vector2 LoadCell(RFBTable table, int sectionIndex, int cellIndex, RectTransform cell);
 
         // Select cell
-        void SelectCell(int sectionIndex, int cellIndex);
+        void SelectCell(RFBTable table, int sectionIndex, int cellIndex);
     }
 
     // Table
@@ -123,7 +123,7 @@ namespace RFB.Utilities
             }
 
             // Get section count
-            totalSections = tableDelegate.GetSectionCount();
+            totalSections = tableDelegate.GetSectionCount(this);
             sectionTransforms = new RectTransform[totalSections];
             _sectionSizes = new Vector2[totalSections];
 
@@ -136,14 +136,14 @@ namespace RFB.Utilities
             for (int s = 0; s < totalSections; s++)
             {
                 // Get section prefab
-                RectTransform sectionPrefab = tableDelegate.GetSectionPrefab(s);
+                RectTransform sectionPrefab = tableDelegate.GetSectionPrefab(this, s);
                 if (sectionPrefab != null)
                 {
                     // Instantiate section
                     RectTransform section = QuickInstantiate(sectionPrefab, "SECTION_" + s.ToString("000"));
 
                     // Load
-                    Vector2 sectionSize = tableDelegate.LoadSection(s, section);
+                    Vector2 sectionSize = tableDelegate.LoadSection(this, s, section);
 
                     // Apply
                     sectionTransforms[s] = section;
@@ -151,14 +151,14 @@ namespace RFB.Utilities
                 }
 
                 // Get cell count
-                int totalCells = tableDelegate.GetCellCount(s);
+                int totalCells = tableDelegate.GetCellCount(this, s);
                 totalCellsPerSection[s] = totalCells;
 
                 // Load cells
                 for (int c = 0; c < totalCells; c++)
                 {
                     // Get cell prefab
-                    RectTransform cellPrefab = tableDelegate.GetCellPrefab(s, c);
+                    RectTransform cellPrefab = tableDelegate.GetCellPrefab(this, s, c);
                     if (cellPrefab == null)
                     {
                         Log("Invalid Cell Prefab\nSection: " + s + "\nCell: " + c, LogType.Warning);
@@ -181,7 +181,7 @@ namespace RFB.Utilities
                     }
 
                     // Load
-                    Vector2 cellSize = tableDelegate.LoadCell(s, c, cell);
+                    Vector2 cellSize = tableDelegate.LoadCell(this, s, c, cell);
 
                     // Apply
                     cellList.Add(cell);
@@ -390,7 +390,7 @@ namespace RFB.Utilities
             // Call
             if (tableDelegate != null)
             {
-                tableDelegate.SelectCell(selectedSection, selectedSectionCell);
+                tableDelegate.SelectCell(this, selectedSection, selectedSectionCell);
             }
         }
         // Refresh
